@@ -1,11 +1,33 @@
-name: Debug
+name: Debug with tmate
+
 on:
-  workflow_dispatch:  # 手动触发
+  workflow_dispatch:
+    inputs:
+      runs-on:
+        type: choice
+        description: 'Select runner platform'
+        required: true
+        default: ubuntu-latest
+        options:
+          - ubuntu-24.04
+          - ubuntu-22.04
+          - ubuntu-24.04-arm
+          - ubuntu-22.04-arm
+          - macos-15
+          - macos-14
+          - macos-13
+          - windows-2025
+          - windows-2022
+          - windows-11-arm
+
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  debug:
+    name: Debug Session
+    runs-on: ${{ inputs.runs-on }}
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup tmate session
-      uses: mxschmitt/action-tmate@v3
+      - uses: actions/checkout@v4
+
+      - name: Start tmate session
+        uses: mxschmitt/action-tmate@v3
+
